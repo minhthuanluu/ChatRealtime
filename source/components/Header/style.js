@@ -25,5 +25,8 @@ export const styles = StyleSheet.create({
     checkContainer:{
         position:"absolute",
         right:-fontScale(80)
+    },
+    nullContent:{
+        width:fontScale(10)
     }
 })

@@ -129,7 +129,6 @@ const Room = () => {
             setPartialResults([]);
             setEnd('');
         } catch (e) {
-            //eslint-disable-next-line
             console.error(e);
         }
     };
@@ -143,6 +142,7 @@ const Room = () => {
                     onPressTitle={() => setUpdatingName(true)}
                     titleInput={updatingName}
                     title={title}
+                    source={images.groupavatar}
                     subtitle={'Active now'}
                     style={styles.header} />
                 <View style={{ ...styles.bottomContain, bottom: keyboardHeight == 0 ? fontScale(20) : keyboardHeight + fontScale(20) }}>

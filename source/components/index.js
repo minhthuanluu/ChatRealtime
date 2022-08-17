@@ -7,3 +7,4 @@ export Header from './Header';
 export TextView from './TextView';
 export Avatar from './Avatar';
 export Operation from './Operation';
+export Toast from './Toast';

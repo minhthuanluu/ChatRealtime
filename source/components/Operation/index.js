@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Animated, View, Easing, TouchableOpacity, Platform } from 'react-native'
+import { Animated, View, TouchableOpacity, Platform } from 'react-native'
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements'
 import { colors } from '../../utils/colors'

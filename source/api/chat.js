@@ -5,7 +5,6 @@ export const createMessage = async (uid, message, roomId) => {
     try {
         return await push(ref(db, Table.Chat), { uid, message, roomId });
     } catch (error) {
-        console.log(error)
         return error;
     }
 }

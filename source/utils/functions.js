@@ -10,7 +10,7 @@ export const convertObjectToArray = (data) => {
     });
 
     return array;
-}
+};
 
 export const generateRandomColor=()=> {
     var letters = '0123456789ABCDEF';
@@ -19,9 +19,9 @@ export const generateRandomColor=()=> {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-}
+};
 
 export const fontScale = (fSize) => {
     let value =  RFValue(fSize, height);
     return value;
-}
+};

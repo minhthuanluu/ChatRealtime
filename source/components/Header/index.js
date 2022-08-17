@@ -9,12 +9,12 @@ import ImageView from '../Image'
 import TextView from '../TextView'
 import { styles } from './style'
 
-const Header = ({ title, subtitle, onPressTitle, titleInput, onChangeTitle, onSaveTitle, subtitleColor }) => {
+const Header = ({ title, subtitle, onPressTitle, titleInput, onChangeTitle, onSaveTitle, subtitleColor, disableGoBack,source }) => {
     const { goBack } = useNavigation();
     return (
         <View style={styles.container}>
-            <Icon name="chevron-left" color={colors.white} size={35} onPress={() => goBack()} />
-            <ImageView size={fontScale(50)} circle />
+            {disableGoBack ? <View style={styles.nullContent} /> : <Icon name="chevron-left" color={colors.white} size={35} onPress={() => goBack()} />}
+            <ImageView size={fontScale(50)} circle source={source}/>
             <View style={styles.textContainer}>
                 {
                     titleInput == true

@@ -6,4 +6,4 @@ export const colors = {
     grey:"#808080",
     black:"#000000",
     lightblue:'#6495ED'
-}
+};

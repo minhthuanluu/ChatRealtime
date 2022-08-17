@@ -6,13 +6,14 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        height:Platform.OS=="android" ? height-fontScale(50):height,
+        height: Platform.OS == "android" ? height - fontScale(50) : height,
         width: '100%',
         position: 'absolute',
         paddingTop: Platform.OS == "ios" ? fontScale(50) : fontScale(40)
     },
     topContainer: {
-        flex: 0.8
+        flex: 0.8,
+        marginTop: fontScale(20)
     },
     searchContainer: {
         marginHorizontal: fontScale(10),

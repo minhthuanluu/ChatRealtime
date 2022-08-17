@@ -13,7 +13,6 @@ export default class RoomApi {
                 roomName
             }
         } catch (error) {
-            console.log(error)
             return error;
         }
     }
@@ -22,14 +21,14 @@ export default class RoomApi {
             const roomList = await get(ref(db, `${Table.Room}`));
             return convertObjectToArray(roomList.val())
         } catch (error) {
-            
+            return error;
         }
     }
     static updateRoomName=async(roomId,roomName)=>{
         try {
             await update(ref(db, `${Table.Room}/${roomId}`), { roomId, roomName });
         } catch (error) {
-            
+            return error;
         }
     }
 }

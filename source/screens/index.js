@@ -1,10 +1,10 @@
 import React from "react"
 import Home from "./Home"
 import Room from './Room'
+import Signin from "./Signin"
+import Splash from "./Splash"
 
-export const HomeScreen = () => {
-    return <Home />
-}
-export const RoomScreen = () => {
-    return <Room />
-}
+export const SplashScreen = () => <Splash />
+export const SigninScreen = () => <Signin />
+export const HomeScreen = () => <Home />
+export const RoomScreen = () => <Room />

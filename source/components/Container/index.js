@@ -1,9 +1,9 @@
 import React from 'react'
 import { Dimensions, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
 
-const Container = ({children}) => {
+const Container = ({children,style}) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{...style,...styles.container}}>
         <StatusBar backgroundColor={'transparent'} translucent/>
         {children}
     </SafeAreaView>
