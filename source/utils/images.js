@@ -3,5 +3,5 @@ export const images = {
     avatar:require("../images/avatardf.jpeg"),
     check:require("../images/check.png"),
     microphone:require("../images/microphone.png"),
-
+    options:require("../images/options.png"),
 }
