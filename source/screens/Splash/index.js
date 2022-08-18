@@ -14,7 +14,7 @@ const Splash = props => {
         const initial = () => {
             setTimeout(() => {
                 auth.onAuthStateChanged((user)=>{
-                    if(user){
+                    if(user.uid){
                         navigate(HOME)
                     }else{
                         navigate(SIGNIN)

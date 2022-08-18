@@ -17,7 +17,7 @@ import { ROOMSETTINGS } from '../../utils/screens';
 const Room = () => {
     const route = useRoute();
     const navigation = useNavigation();
-    const { roomName, roomId,voiceMode } = route.params;
+    const { roomName, roomId, voiceMode } = route.params;
     const [updatingName, setUpdatingName] = useState(false);
     const [title, setTitle] = useState(roomName);
     const [results, setResults] = useState([]);
@@ -28,7 +28,7 @@ const Room = () => {
     const [end, setEnd] = useState('');
     const [voiceMessage, setVoiceMessage] = useState('');
     const [messageList, setMessageList] = useState([]);
-    const [_voiceMode, setVoiceMode] = useState(voiceMode);
+    const [_voiceMode, setVoiceMode] = useState();
     const isFocus = useIsFocused();
 
 
@@ -41,18 +41,18 @@ const Room = () => {
 
     useEffect(() => {
         //Setting callbacks for the process status
-        Voice.onSpeechStart = onSpeechStart;
-        Voice.onSpeechEnd = onSpeechEnd;
-        Voice.onSpeechError = onSpeechError;
-        Voice.onSpeechResults = onSpeechResults;
-        Voice.onSpeechPartialResults = onSpeechPartialResults;
-        Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+        Voice._onSpeechStart = onSpeechStart;
+        Voice._onSpeechEnd = onSpeechEnd;
+        Voice._onSpeechError = onSpeechError;
+        Voice._onSpeechResults = onSpeechResults;
+        Voice._onSpeechPartialResults = onSpeechPartialResults;
+        Voice._onSpeechVolumeChanged = onSpeechVolumeChanged;
 
         return () => {
             //destroy the process after switching the screen
             Voice.destroy().then(Voice.removeAllListeners);
         };
-    }, []);
+    }, [voiceMessage]);
 
     const onSpeechStart = (e) => {
         //Invoked when .start() is called without error
@@ -164,28 +164,26 @@ const Room = () => {
         }
     }
 
-    const checkVoiceMode = async() => {
-        if(!!!route.params?.voiceMode){
+    const checkVoiceMode = async () => {
+        if (!!!route.params?.voiceMode) {
             try {
-                const data = await RoomApi.getRoomById(roomId);
+                const data = await UserApi.getUserByUid(auth.currentUser?.uid);
                 setVoiceMode(data?.voiceMode)
-              } catch (error) {
-          
-              }
+            } catch (error) {
+
+            }
         }
-        
+
     }
 
     const checkPermission = () => {
-        if(auth.currentUser.uid===route.params.uid){
-            navigation.navigate(ROOMSETTINGS,{voiceMode,roomId})
-        }
+            navigation.navigate(ROOMSETTINGS, { voiceMode, roomId })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getMessageByRoomId();
-            checkVoiceMode();
-    },[roomId,isFocus])
+        checkVoiceMode();
+    }, [roomId, isFocus])
 
 
 
@@ -201,7 +199,7 @@ const Room = () => {
                     source={images.groupavatar}
                     subtitle={roomId}
                     rightIcon={images.options}
-                    onRightIconPress={()=>{checkPermission()}}
+                    onRightIconPress={() => { checkPermission() }}
                     style={styles.header} />
                 <FlatList
                     data={messageList}
@@ -209,9 +207,10 @@ const Room = () => {
                     style={styles.messageList}
                     renderItem={({ item, index }) => {
                         return <ChatListItem right={item.uid === auth.currentUser.uid ? true : false} key={item.id} label={item.name}
-                        message={item.message} />
+                            message={item.message} />
                     }}
                 />
+                
                 <View style={{ ...styles.bottomContain, bottom: keyboardHeight == 0 ? fontScale(20) : keyboardHeight + fontScale(20) }}>
                     <Operation
                         value={voiceMessage.toString()}

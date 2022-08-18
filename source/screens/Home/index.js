@@ -46,7 +46,7 @@ const Home = () => {
     const createRoom = () => {
         try {
             const roomName = "Noname";
-            const { uid } = auth.currentUser;
+            const { uid } = auth?.currentUser;
             RoomApi.createRoom(roomName, uid).then(({ roomId, roomName }) => {
                 navigation.navigate(ROOM, { roomId, roomName, uid });
             });
@@ -66,10 +66,10 @@ const Home = () => {
         }
     }
 
-    const getUserInfor = () => {
+    const getUserInfor = async() => {
         try {
-            UserApi.getUserByUid().then(({ result, error }) => {
-                setUser(result)
+            await UserApi.getUserByUid().then((result) => {
+                setUser(result);
             })
         } catch (error) {
             console.log(error)
@@ -89,7 +89,7 @@ const Home = () => {
                     onPressTitle={() => setUpdatingName(true)}
                     onRightIconPress={() => navigation.navigate(SETTINGS)}
                     disableGoBack
-                    title={user.name}
+                    title={user?.name}
                     subtitle={'Active now'}
                     style={styles.header} />
 
@@ -104,7 +104,7 @@ const Home = () => {
                         renderItem={({ item, index }) => {
                             return (
                                 <HomeListItem
-                                    label={item.roomName}
+                                    label={item?.roomName}
                                     onPress={() =>
                                         navigation.navigate(ROOM,
                                             {

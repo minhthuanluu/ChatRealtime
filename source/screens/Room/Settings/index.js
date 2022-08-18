@@ -8,19 +8,22 @@ import ToggleSwitch from 'toggle-switch-react-native'
 import { colors } from '../../../utils/colors';
 import TextView from '../../../components/TextView';
 import { fontScale } from '../../../utils/functions';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import RoomApi from '../../../api/room';
 import { ROOM } from '../../../utils/screens';
+import UserApi from '../../../api/user';
+import { auth } from '../../../api/constant';
 
 const RoomSettings = () => {
   const route = useRoute();
   const { voiceMode, roomId } = route.params;
-  const [toggle, setToggle] = useState(route.params?.voiceMode);
+  const [toggle, setToggle] = useState(false);
   const [roomInfor, setRoomInfor] = useState(null);
+  const isFocus = useIsFocused();
 
   const activeVoiceMode = async (mode) => {
     try {
-      await RoomApi.updateVoiceMode(roomId, mode).then(({ voiceMode }) => {
+      await UserApi.updateVoiceMode(auth?.currentUser?.uid, mode).then(({ voiceMode }) => {
         setToggle(!toggle);
       });
     } catch (error) {
@@ -30,9 +33,10 @@ const RoomSettings = () => {
 
   const initial = async () => {
     try {
-      const data = await RoomApi.getRoomById(roomId);
+      const data = await UserApi.getUserByUid(auth.currentUser.uid);
       setRoomInfor(data);
       setToggle(data?.voiceMode)
+      console.log(data?.voiceMode)
     } catch (error) {
 
     }
@@ -40,7 +44,7 @@ const RoomSettings = () => {
 
   useEffect(() => {
     initial();
-  }, [roomInfor])
+  }, [])
 
   return (
     <Container>

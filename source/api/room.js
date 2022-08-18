@@ -32,14 +32,6 @@ export default class RoomApi {
             return error;
         }
     }
-    static updateVoiceMode = async (roomId, voiceMode) => {
-        try {
-            await update(ref(db, `${Table.Room}/${roomId}`), { voiceMode });
-            return voiceMode;
-        } catch (error) {
-            return error;
-        }
-    }
     static getRoomById = async (roomId) => {
         try {
             const room = await (await get(ref(db, `${Table.Room}/${roomId}`))).val();
