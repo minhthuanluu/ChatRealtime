@@ -102,7 +102,19 @@ const Home = () => {
                         data={tempRoomList}
                         keyExtractor={(item, index) => item.roomId}
                         renderItem={({ item, index }) => {
-                            return <HomeListItem label={item.roomName} onPress={() => navigation.navigate(ROOM, { roomId: item.roomId, roomName: item.roomName, uid: item.creator })} />
+                            return (
+                                <HomeListItem
+                                    label={item.roomName}
+                                    onPress={() =>
+                                        navigation.navigate(ROOM,
+                                            {
+                                                roomId: item.roomId,
+                                                roomName: item.roomName,
+                                                uid: item.creator,
+                                                voiceMode: item.voiceMode
+                                            }
+                                        )} />
+                            )
                         }}
                     />
                 </View>

@@ -1,5 +1,5 @@
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FlatList, ImageBackground, Text, View } from 'react-native';
 import RoomApi from '../../api/room';
 import { Operation, Header, Container, TextInput, Button } from '../../components'
@@ -17,7 +17,7 @@ import { ROOMSETTINGS } from '../../utils/screens';
 const Room = () => {
     const route = useRoute();
     const navigation = useNavigation();
-    const { roomName, roomId,uid } = route.params;
+    const { roomName, roomId,voiceMode } = route.params;
     const [updatingName, setUpdatingName] = useState(false);
     const [title, setTitle] = useState(roomName);
     const [results, setResults] = useState([]);
@@ -28,7 +28,8 @@ const Room = () => {
     const [end, setEnd] = useState('');
     const [voiceMessage, setVoiceMessage] = useState('');
     const [messageList, setMessageList] = useState([]);
-    const [ortherUser, setOrtherUser] = useState();
+    const [_voiceMode, setVoiceMode] = useState(voiceMode);
+    const isFocus = useIsFocused();
 
 
     const onSaveTitle = (title) => {
@@ -163,15 +164,31 @@ const Room = () => {
         }
     }
 
+    const checkVoiceMode = async() => {
+        if(!!!route.params?.voiceMode){
+            try {
+                const data = await RoomApi.getRoomById(roomId);
+                setVoiceMode(data?.voiceMode)
+              } catch (error) {
+          
+              }
+        }
+        
+    }
+
     const checkPermission = () => {
         if(auth.currentUser.uid===route.params.uid){
-            navigation.navigate(ROOMSETTINGS)
+            navigation.navigate(ROOMSETTINGS,{voiceMode,roomId})
         }
     }
 
-    useFocusEffect(() => {
+    useEffect(()=>{
         getMessageByRoomId();
-    });
+            checkVoiceMode();
+    },[roomId,isFocus])
+
+
+
     return (
         <Container>
             <ImageBackground source={images.sky} resizeMode="cover" style={styles.container}>
@@ -201,7 +218,8 @@ const Room = () => {
                         onChangeText={(value) => setVoiceMessage(value)}
                         onSend={() => sendMessage(voiceMessage)}
                         onSpeechStart={() => startRecognizing()}
-                        onSpeechEnd={() => stopRecognizing()} />
+                        onSpeechEnd={() => stopRecognizing()}
+                        voiceMode={_voiceMode} />
                 </View>
             </ImageBackground>
         </Container>

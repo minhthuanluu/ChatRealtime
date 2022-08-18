@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Operation, Header, Container, TextInput, Button } from '../../../components'
 import { ImageBackground, View } from 'react-native';
 import { images } from '../../../utils/images';
@@ -8,9 +8,39 @@ import ToggleSwitch from 'toggle-switch-react-native'
 import { colors } from '../../../utils/colors';
 import TextView from '../../../components/TextView';
 import { fontScale } from '../../../utils/functions';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import RoomApi from '../../../api/room';
+import { ROOM } from '../../../utils/screens';
 
 const RoomSettings = () => {
-  const [toggle, setToggle] = useState(false);
+  const route = useRoute();
+  const { voiceMode, roomId } = route.params;
+  const [toggle, setToggle] = useState(route.params?.voiceMode);
+  const [roomInfor, setRoomInfor] = useState(null);
+
+  const activeVoiceMode = async (mode) => {
+    try {
+      await RoomApi.updateVoiceMode(roomId, mode).then(({ voiceMode }) => {
+        setToggle(!toggle);
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const initial = async () => {
+    try {
+      const data = await RoomApi.getRoomById(roomId);
+      setRoomInfor(data);
+      setToggle(data?.voiceMode)
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    initial();
+  }, [roomInfor])
 
   return (
     <Container>
@@ -22,9 +52,10 @@ const RoomSettings = () => {
             <ToggleSwitch
               isOn={toggle}
               onColor={colors.blue}
-              offColor={colors.grey}
+              offColor={colors.lightgrey}
+              animationSpeed={100}
               size="medium"
-              onToggle={isOn => setToggle(isOn)}
+              onToggle={isOn => activeVoiceMode(isOn)}
             />
           </View>
         </View>
