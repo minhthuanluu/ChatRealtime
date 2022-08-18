@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
         flex:1,
         height:Dimensions.get("screen").height,
         width:'100%',
-        paddingTop:40,
+        paddingTop:fontScale(40),
         position:'absolute',
     },
     header:{
@@ -17,5 +17,9 @@ export const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         paddingHorizontal:10
+    },
+    messageList:{
+        marginHorizontal:fontScale(10),
+        marginTop:fontScale(10)
     }
 })

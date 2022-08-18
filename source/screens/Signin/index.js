@@ -18,22 +18,26 @@ const Signin = () => {
 
     const signinUser = async (email, password) => {
         setError(null);
+        setLoading(true);
         const { user, error } = await UserApi.signin(email, password);
         if (user) {
-
-        } else {
+            setLoading(false);
+            navigate(HOME);
+        } 
+        if(error) {
             setError(error.code);
-            setVisible(true)
+            setLoading(false);
+            setVisible(true);
             setTimeout(() => {
-                setVisible(false)
+                setVisible(false);
             }, 3000);
-        }
-    }
+        };
+    };
 
     return (
         <Container style={styles.container}>
             <View style={styles.form}>
-                <TextInput onChangeText={(value) => setEmail(value)} placeholder={Text.email} value={email} iconName="email" />
+                <TextInput autoCapitalize={'none'} onChangeText={(value) => setEmail(value)} placeholder={Text.email} value={email} iconName="email" />
                 <TextInput onChangeText={(value) => setPassword(value)} password placeholder={Text.password} value={password} iconName="lock" />
                 <Button label={Text.signin} onPress={() => signinUser(email, password)} />
                 {loading && <ActivityIndicator size={"small"} color={colors.white} style={styles.loading} />}

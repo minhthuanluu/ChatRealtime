@@ -1,5 +1,6 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { get, push, ref, set } from "firebase/database";
+import { SPLASH } from "../utils/screens";
 import { auth, db, Table } from "./constant";
 
 export default class UserApi {
@@ -21,6 +22,12 @@ export default class UserApi {
                 result: null,
                 error
             };
+        }
+    }
+    static signout = async(navigate)=>{
+        await signOut(auth);
+        if(auth===null){
+            navigate(SPLASH);
         }
     }
     static getUserByUid = async () => {

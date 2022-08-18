@@ -32,7 +32,9 @@ const Operation = ({ onSend, onSpeechStart, onSpeechEnd, value, onChangeText }) 
     <View>
       <View style={{ ...styles.container, bottom: Platform.OS == "android" && !showRecording ? fontScale(40) : -fontScale(10) }}>
         <TextField onChangeText={onChangeText} placeholder={Text.typeMessage} onSend={onSend} value={value} rightIcon={'micro-phone'} onRightIconPress={() => setShowRecording(!showRecording)} />
-        <Icon name="send" color={colors.blue} size={fontScale(30)} />
+        <TouchableOpacity  onPress={onSend}>
+        <Icon name="send" color={colors.blue} size={fontScale(35)}/>
+        </TouchableOpacity>
       </View>
       {
         showRecording

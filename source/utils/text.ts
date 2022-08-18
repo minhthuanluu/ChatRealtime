@@ -4,5 +4,8 @@ export const Text : object = {
     email:"Email",
     password:"Password",
     signin:"Sign in",
-    dataNotFound:"Data not found"
+    dataNotFound:"Data not found",
+    settings:"Setting",
+    signout:"Sign out",
+    roomsettings:'Settings'
 }

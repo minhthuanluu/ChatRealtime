@@ -8,3 +8,4 @@ export TextView from './TextView';
 export Avatar from './Avatar';
 export Operation from './Operation';
 export Toast from './Toast';
+export ChatListItem from './ChatListItem'

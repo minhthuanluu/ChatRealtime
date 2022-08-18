@@ -22,7 +22,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const db = getDatabase();
-export const chatRef = ref(db,'chat/');
-export const fb = firebase;
 export const Table = {Room:'Room',Chat:'Chat',User:'User'}
 export default app;

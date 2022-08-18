@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
         alignItems:'center'
     },
     textContainer:{
+        flex:1,
         justifyContent:'center',
         marginHorizontal:fontScale(10)
     },
@@ -28,5 +29,11 @@ export const styles = StyleSheet.create({
     },
     nullContent:{
         width:fontScale(10)
+    },
+    normalTitle:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+        paddingRight:fontScale(25)
     }
 })

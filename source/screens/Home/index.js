@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { View, ImageBackground, FlatList } from 'react-native'
+import { auth } from '../../api/constant'
 import RoomApi from '../../api/room'
 import UserApi from '../../api/user'
 import { HomeListItem, Container, TextInput, Button, Header, TextView } from '../../components'
 import { colors } from '../../utils/colors'
 import { images } from '../../utils/images'
-import { ROOM } from '../../utils/screens'
+import { ROOM, SETTINGS } from '../../utils/screens'
 import { Text } from '../../utils/text'
 import { styles } from './style'
 
@@ -19,30 +20,35 @@ const Home = () => {
     const navigation = useNavigation();
 
     const searchRoom = (text = '') => {
-        setMessage('');
-        tempRoomList.concat(tempRoomList);
-        const newData = tempRoomList.filter(item => {
-            const itemData = `${item.roomName.toUpperCase()}`;
-            return itemData.indexOf(text.toUpperCase()) > -1;
-        });
-        if (text.length > 0) {
-            if (newData.length > 0) {
-                setTempRoomList(newData);
-            } else {
-                setMessage(Text.dataNotFound);
-                setTempRoomList([])
-            }
+        if (tempRoomList.length > 1) {
+            setMessage('');
+            tempRoomList.concat(tempRoomList);
+            const newData = tempRoomList.filter(item => {
+                const itemData = `${item.roomName.toUpperCase()}`;
+                return itemData.indexOf(text.toUpperCase()) > -1;
+            });
+            if (text.length > 0) {
+                if (newData.length > 0) {
+                    setTempRoomList(newData);
+                } else {
+                    setMessage(Text.dataNotFound);
+                    setTempRoomList([])
+                }
 
-        } else if (text.length == 0) {
-            setTempRoomList(roomList);
+            } else if (text.length == 0) {
+                setTempRoomList(roomList);
+            }
+        } else {
+
         }
     }
 
     const createRoom = () => {
         try {
             const roomName = "Noname";
-            RoomApi.createRoom(roomName).then(({ roomId, roomName }) => {
-                navigation.navigate(ROOM, { roomId, roomName });
+            const { uid } = auth.currentUser;
+            RoomApi.createRoom(roomName, uid).then(({ roomId, roomName }) => {
+                navigation.navigate(ROOM, { roomId, roomName, uid });
             });
         } catch (error) {
             console.log(error);
@@ -55,17 +61,24 @@ const Home = () => {
                 setRoomList(res);
                 setTempRoomList(res);
             });
-            UserApi.getUserByUid().then(({ result, error }) => {
-                setUser(result)
-            })
         } catch (error) {
             console.log(error);
         }
     }
 
+    const getUserInfor = () => {
+        try {
+            UserApi.getUserByUid().then(({ result, error }) => {
+                setUser(result)
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         getRoomList();
-
+        getUserInfor();
     }, [])
     return (
         <Container>
@@ -74,6 +87,7 @@ const Home = () => {
                     onChangeTitle={(value) => setTitle(value)}
                     onSaveTitle={() => onSaveTitle(title)}
                     onPressTitle={() => setUpdatingName(true)}
+                    onRightIconPress={() => navigation.navigate(SETTINGS)}
                     disableGoBack
                     title={user.name}
                     subtitle={'Active now'}
@@ -88,7 +102,7 @@ const Home = () => {
                         data={tempRoomList}
                         keyExtractor={(item, index) => item.roomId}
                         renderItem={({ item, index }) => {
-                            return <HomeListItem label={item.roomName} onPress={() => navigation.navigate(ROOM, { roomId: item.roomId, roomName: item.roomName })} />
+                            return <HomeListItem label={item.roomName} onPress={() => navigation.navigate(ROOM, { roomId: item.roomId, roomName: item.roomName, uid: item.creator })} />
                         }}
                     />
                 </View>
