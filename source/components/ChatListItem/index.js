@@ -12,7 +12,6 @@ const ChatListItem = ({ right, message, label }) => {
         const getNameByUId = async(uid) => {
             const { result } = await UserApi.getUserByUid(uid);
             setName(result?.name)
-            console.log(result)
         }
         getNameByUId()
     },[message]);

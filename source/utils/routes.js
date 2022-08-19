@@ -1,5 +1,5 @@
-import { HomeScreen, RoomDetailScreen, RoomScreen, RoomSettingsScreen, SettingsScreen, SigninScreen, SplashScreen } from "../screens";
-import { HOME, ROOM, SIGNIN, SPLASH, ROOMDETAIL, SETTINGS, ROOMSETTINGS } from "./screens";
+import { HomeScreen, LanguageScreen, RoomDetailScreen, RoomScreen, RoomSettingsScreen, SettingsScreen, SigninScreen, SplashScreen } from "../screens";
+import { HOME, ROOM, SIGNIN, SPLASH, ROOMDETAIL, SETTINGS, ROOMSETTINGS, LANGUAGE } from "./screens";
 
 export const Route = [
     {
@@ -31,5 +31,10 @@ export const Route = [
         id:5,
         name:SETTINGS,
         comp:SettingsScreen
+    },
+    {
+        id:5,
+        name:LANGUAGE,
+        comp:LanguageScreen
     },
 ]

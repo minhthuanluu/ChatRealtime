@@ -19,8 +19,8 @@ const Signin = () => {
     const signinUser = async (email, password) => {
         setError(null);
         setLoading(true);
-        const { user, error } = await UserApi.signin(email, password);
-        if (user) {
+        const { result, error } = await UserApi.signin(email, password);
+        if (result) {
             setLoading(false);
             navigate(HOME);
         } 

@@ -6,20 +6,28 @@ import { ActivityIndicator } from 'react-native'
 import { colors } from '../../utils/colors'
 import { auth } from '../../api/constant'
 import { useNavigation } from '@react-navigation/native'
-import { HOME, SIGNIN } from '../../utils/screens'
+import { HOME, LANGUAGE, SIGNIN } from '../../utils/screens'
+import { retriveData } from '../../utils/localstorage'
 
 const Splash = props => {
-    const {navigate} = useNavigation();
+    const { navigate } = useNavigation();
     useEffect(() => {
         const initial = () => {
-            setTimeout(() => {
-                auth.onAuthStateChanged((user)=>{
-                    if(user){
-                        navigate(HOME)
-                    }else{
-                        navigate(SIGNIN)
+            setTimeout(async () => {
+                await retriveData('isUsed').then((item) => {
+                    if (item!==undefined) {
+                        auth.onAuthStateChanged((user) => {
+                            if (user) {
+                                navigate(HOME)
+                            } else {
+                                navigate(SIGNIN)
+                            }
+                        })
+                    } else {
+                        navigate(LANGUAGE);
                     }
                 })
+
             }, 3000);
         }
         initial();

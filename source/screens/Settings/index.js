@@ -7,6 +7,7 @@ import ImageView from '../../components/Image';
 import { colors } from '../../utils/colors';
 import { fontScale } from '../../utils/functions';
 import { images } from '../../utils/images';
+import { retriveData } from '../../utils/localstorage';
 import { Text } from '../../utils/text';
 import { styles } from './style';
 
@@ -14,14 +15,20 @@ const Settings = () => {
     const [user, setUser] = useState(null);
     const { navigate } = useNavigation();
     const [isSwitchOn, setIsSwitchOn] = useState(false);
+    const [userLanguage, setUserLanguage] = useState('')
     const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
     useEffect(() => {
         const initial = async () => {
             await UserApi.getUserByUid().then(({ result, error }) => {
                 setUser(result)
-            })
-        }
+            });
+            await retriveData("devicelanguage").then((item) => {
+                if (item) {
+                    setUserLanguage(item);
+                };
+            });
+        };
         initial();
     }, [navigate])
     return (
@@ -34,7 +41,10 @@ const Settings = () => {
                     <View style={styles.inforAndMenu}>
                         <TextView color={colors.blue} bold center>{user?.name}</TextView>
                         <TextView color={colors.blue} center>{user?.email}</TextView>
-
+                    </View>
+                    <View style={styles.item}>
+                        <TextView style={{flex:0.3}} color={colors.grey} bold center>Language</TextView>
+                        <TextView style={{flex:0.7}} color={colors.black}>{userLanguage === "en" ? "English" : "Vietnamese"}</TextView>
                     </View>
                 </View>
                 <View style={styles.signoutContainer}>

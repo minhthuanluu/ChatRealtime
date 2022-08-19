@@ -1,6 +1,8 @@
 import { get, orderByChild, push, query, ref, set, update } from "firebase/database";
+import instance from ".";
 import { convertObjectToArray } from "../utils/functions";
 import { auth, db, Table } from "./constant";
+import axios from "axios";
 
 export const createMessage = async (uid, message, roomId) => {
     try {
@@ -11,12 +13,12 @@ export const createMessage = async (uid, message, roomId) => {
 }
 
 export default class ChatApi {
-    static createMessage = async (uid, message, roomId) => {
+    static createMessage = async (uid, message, messageEn, roomId) => {
         const time = Date.now();
         try {
             const _ref = await push(ref(db, Table.Chat));
             const key = _ref.key;
-            await update(ref(db, `${Table.Chat}/${key}`), { uid, message, roomId, time });
+            await update(ref(db, `${Table.Chat}/${key}`), { uid, message, messageEn, roomId, time });
             return true;
         } catch (error) {
             return error;
@@ -38,4 +40,29 @@ export default class ChatApi {
             };
         }
     }
+    static translateMessage = async (text, to) => {
+        try {
+            var params = {
+                'text_need_trans': text,
+                to
+            };
+
+            const data = encodeFormData(params);
+            return await instance.request({
+                method: "POST", url: 'https://autotranslationagl.herokuapp.com/api/trans',
+                data
+            });
+        } catch (error) {
+            return {
+                result: null,
+                error: error
+            }
+        }
+    }
+}
+
+const encodeFormData = (data) => {
+    return Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Animated, View, TouchableOpacity, Platform } from 'react-native'
+import { Animated, View, TouchableOpacity, Platform, ActivityIndicator } from 'react-native'
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements'
 import { colors } from '../../utils/colors'
@@ -11,7 +11,7 @@ import TextField from '../TextInput'
 import TextView from '../TextView'
 import { styles } from './style'
 
-const Operation = ({ onSend, onSpeechStart, onSpeechEnd, value, onChangeText }) => {
+const Operation = ({ onSend, onSpeechStart, onSpeechEnd, value, onChangeText,loading }) => {
   const [showRecording, setShowRecording] = useState(false);
   const [recordingColor, setRecordingColor] = useState(colors.grey);
   const [endWave, setEndWave] = useState(true)
@@ -31,7 +31,7 @@ const Operation = ({ onSend, onSpeechStart, onSpeechEnd, value, onChangeText }) 
   return (
     <View>
       <View style={{ ...styles.container, bottom: Platform.OS == "android" && !showRecording ? fontScale(40) : -fontScale(10) }}>
-        <TextField onChangeText={onChangeText} placeholder={Text.typeMessage} onSend={onSend} value={value} rightIcon={'micro-phone'} onRightIconPress={() => setShowRecording(!showRecording)} />
+        <TextField onChangeText={onChangeText} placeholder={Text.typeMessage} onSend={onSend} value={value} loading={loading} rightIcon={'micro-phone'} onRightIconPress={() => setShowRecording(!showRecording)} />
         <TouchableOpacity  onPress={onSend}>
         <Icon name="send" color={colors.blue} size={fontScale(35)}/>
         </TouchableOpacity>

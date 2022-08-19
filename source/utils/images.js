@@ -7,4 +7,6 @@ export const images = {
     groupavatar:require("../images/gavatar.png"),
     settings:require("../images/settings.png"),
     signout:require("../images/signout.png"),
+    us:require("../images/us.png"),
+    vi:require("../images/vi.png"),
 };

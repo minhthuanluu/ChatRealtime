@@ -5,3 +5,4 @@ export const CREATEROOM = 'CREATEROOM';
 export const SIGNIN = 'SIGNIN';
 export const ROOMSETTINGS = 'ROOMSETTINGS';
 export const SETTINGS = 'SETTINGS';
+export const LANGUAGE = 'LANGUAGE'

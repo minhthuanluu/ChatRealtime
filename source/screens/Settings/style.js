@@ -32,5 +32,9 @@ export const styles = StyleSheet.create({
     },
     inforAndMenu:{
         marginTop:fontScale(20)
+    },
+    item:{
+        flexDirection:"row",
+        marginTop:fontScale(30)
     }
 })

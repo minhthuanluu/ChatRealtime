@@ -5,6 +5,7 @@ import RoomSettings from "./Room/Settings"
 import Signin from "./Signin"
 import Splash from "./Splash"
 import Settings from "./Settings"
+import Language from "./Language"
 
 export const SplashScreen = () => <Splash />
 export const SigninScreen = () => <Signin />
@@ -12,3 +13,4 @@ export const HomeScreen = () => <Home />
 export const RoomScreen = () => <Room />
 export const RoomSettingsScreen = () => <RoomSettings/>
 export const SettingsScreen = () => <Settings/>
+export const LanguageScreen = () => <Language/>
