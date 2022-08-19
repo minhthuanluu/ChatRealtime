@@ -14,6 +14,7 @@ import { styles } from './style'
 const Home = () => {
     const [roomList, setRoomList] = useState([]);
     const [tempRoomList, setTempRoomList] = useState([]);
+    const [updatingName,setUpdatingName] = useState(false);
     const [user, setUser] = useState({});
     const [message, setMessage] = useState('')
 

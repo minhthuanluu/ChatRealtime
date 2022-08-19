@@ -7,11 +7,11 @@ import { fontScale } from '../../utils/functions';
 import { images } from '../../utils/images';
 import { useKeyboard } from '../../utils/keyboard';
 import { styles } from './style';
+// import Voice from '../../modules/react-native-voice';
 import Voice from 'react-native-voice';
 import ChatApi from '../../api/chat';
 import { auth } from '../../api/constant';
 import ChatListItem from '../../components/ChatListItem';
-import UserApi from '../../api/user';
 import { ROOMSETTINGS } from '../../utils/screens';
 
 const Room = () => {
@@ -40,12 +40,12 @@ const Room = () => {
 
     useEffect(() => {
         //Setting callbacks for the process status
-        Voice.onSpeechStart = onSpeechStart;
-        Voice.onSpeechEnd = onSpeechEnd;
-        Voice.onSpeechError = onSpeechError;
-        Voice.onSpeechResults = onSpeechResults;
-        Voice.onSpeechPartialResults = onSpeechPartialResults;
-        Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
+        Voice._onSpeechStart = onSpeechStart;
+        Voice._onSpeechEnd = onSpeechEnd;
+        Voice._onSpeechError = onSpeechError;
+        Voice._onSpeechResults = onSpeechResults;
+        Voice._onSpeechPartialResults = onSpeechPartialResults;
+        Voice._onSpeechVolumeChanged = onSpeechVolumeChanged;
 
         return () => {
             //destroy the process after switching the screen
@@ -94,7 +94,7 @@ const Room = () => {
         //Starts listening for speech for a specific locale
         console.log('start recording voice...')
         try {
-            await Voice.start('en-US');
+            await Voice.start('vi-VN');
             setPitch('');
             setError('');
             setStarted('');
