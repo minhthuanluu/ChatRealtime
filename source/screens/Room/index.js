@@ -67,6 +67,11 @@ const Room = () => {
         Voice.onSpeechPartialResults = onSpeechPartialResults;
         Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
         getUserInfor();
+
+        navigation.addListener('focus',async()=>{
+            await getUserInfor();
+        })
+
         return () => {
             //destroy the process after switching the screen
             Voice.destroy().then(Voice.removeAllListeners);
@@ -173,9 +178,9 @@ const Room = () => {
     }
 
     const checkPermission = () => {
-        if (auth.currentUser.uid === route.params.uid) {
+        // if (auth.currentUser.uid === route.params.uid) {
             navigation.navigate(ROOMSETTINGS)
-        }
+        // }
     }
 
     useFocusEffect(() => {

@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { get, push, ref, set } from "firebase/database";
+import { get, push, ref, set, update } from "firebase/database";
 import { SPLASH } from "../utils/screens";
 import { auth, db, Table } from "./constant";
 
@@ -41,6 +41,21 @@ export default class UserApi {
         } catch (error) {
             return {
                 result: null,
+                error
+            };
+        }
+    }
+    static updateVoiceMode=async(voiceMode)=>{
+        try {
+            const uid = auth.currentUser.uid;
+            await update(ref(db, `${Table.User}/${uid}`), { voiceMode });
+            return {
+                result: true,
+                error: null
+            }
+        } catch (error) {
+            return {
+                result:null,
                 error
             };
         }

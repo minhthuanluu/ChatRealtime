@@ -9,4 +9,5 @@ export const images = {
     signout:require("../images/signout.png"),
     us:require("../images/us.png"),
     vi:require("../images/vi.png"),
+    langbg:require("../images/langbg.jpg"),
 };

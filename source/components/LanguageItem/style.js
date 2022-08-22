@@ -6,8 +6,8 @@ export const styles = StyleSheet.create({
         flexDirection:"row"
     },
     icon:{
-        width:fontScale(30),
-        height:fontScale(20),
-        borderRadius:fontScale(5)
+        width:fontScale(35),
+        height:fontScale(30),
+        borderRadius:fontScale(10)
     }
 })

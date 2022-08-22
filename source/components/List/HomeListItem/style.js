@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
         flexDirection:'row'
     },
     textContent:{
-        marginHorizontal:10,
+        marginHorizontal:fontScale(10),
         justifyContent:'center'
     }
 })
