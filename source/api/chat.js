@@ -47,11 +47,17 @@ export default class ChatApi {
                 to
             };
 
-            const data = encodeFormData(params);
-            return await instance.request({
+            const _params = encodeFormData(params);
+
+            const {data} = await instance.request({
                 method: "POST", url: 'https://autotranslationagl.herokuapp.com/api/trans',
-                data
+                data:_params
             });
+            
+            return {
+                data,
+                error: null
+            }
         } catch (error) {
             return {
                 result: null,

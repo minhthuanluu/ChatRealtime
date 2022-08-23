@@ -1,5 +1,6 @@
 import { Dimensions, StatusBar, StyleSheet } from "react-native";
 import { fontScale } from "../../utils/functions";
+import { width } from "../../utils/variable";
 
 export const styles = StyleSheet.create({
     container:{
@@ -21,5 +22,6 @@ export const styles = StyleSheet.create({
     messageList:{
         marginHorizontal:fontScale(10),
         marginTop:fontScale(10)
-    }
+    },
+    voiceIconContain:{flex:1,justifyContent:"flex-end",position:"absolute",left:width-fontScale(50),bottom:fontScale(50)}
 })

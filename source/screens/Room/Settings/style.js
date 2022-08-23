@@ -17,5 +17,10 @@ export const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:"space-between",
         marginHorizontal:fontScale(16)
+    },
+    menu:{
+        marginVertical:fontScale(10),
+        borderBottomWidth:0.4,
+        borderBottomColor:"white"
     }
 })

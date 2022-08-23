@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
-import { FlatList, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ImageBackground, Text, TouchableOpacity, View, Image, Keyboard, Platform } from 'react-native';
 import RoomApi from '../../api/room';
 import { Operation, Header, Container, TextInput, Button } from '../../components'
 import { fontScale } from '../../utils/functions';
@@ -18,6 +18,7 @@ import ImageView from '../../components/Image';
 import { colors } from '../../utils/colors'
 import { width } from '../../utils/variable';
 import { retriveData } from '../../utils/localstorage';
+import Toast from '../../components/Toast';
 
 const Room = () => {
     const route = useRoute();
@@ -37,8 +38,10 @@ const Room = () => {
     const [ortherUser, setOrtherUser] = useState();
     const [loading, setLoading] = useState(false);
     const [userInfor, setUserInfor] = useState(null);
-    const [userLanguage,setUserLanguage] = useState(null);
+    const [userLanguage, setUserLanguage] = useState(null);
     const ref = useRef();
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const ITEM_HEIGHT = 100;
 
 
     const onSaveTitle = (title) => {
@@ -47,7 +50,7 @@ const Room = () => {
     }
 
     const getUserInfor = async () => {
-        const {result,error} = await UserApi.getUserByUid(uid);
+        const { result, error } = await UserApi.getUserByUid(uid);
         setUserInfor(result);
         await retriveData("devicelanguage").then((item) => {
             if (item) {
@@ -68,37 +71,54 @@ const Room = () => {
         Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
         getUserInfor();
 
-        navigation.addListener('focus',async()=>{
+        navigation.addListener('focus', async () => {
             await getUserInfor();
         })
+
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true); // or some other action
+                ref.current.scrollToEnd({ animated: true });
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false); // or some other action
+            }
+        );
+
 
         return () => {
             //destroy the process after switching the screen
             Voice.destroy().then(Voice.removeAllListeners);
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
         };
     }, [voiceMessage]);
 
     const onSpeechStart = (e) => {
         //Invoked when .start() is called without error
-        console.log('onSpeechStart: ', e);
-        setStarted('√');
+        // console.log('onSpeechStart: ', e);
+        // setStarted('√');
     };
 
     const onSpeechEnd = (e) => {
         //Invoked when SpeechRecognizer stops recognition
-        console.log('onSpeechEnd: ', e);
-        setEnd('√');
+        // console.log('onSpeechEnd: ', e);
+        // setEnd('√');
     };
 
     const onSpeechError = (e) => {
         //Invoked when an error occurs.
-        console.log('onSpeechError: ', e);
-        setError(JSON.stringify(e.error));
+        // console.log('onSpeechError: ', e);
+        // setError(JSON.stringify(e.error));
     };
 
     const onSpeechResults = async (e) => {
         // nhận diện giọng nói thành công
-        console.log('onSpeechResults: ', e);
+        // console.log('onSpeechResults: ', e);
         const message = e.value;
         message.join();
     };
@@ -108,7 +128,7 @@ const Room = () => {
         setPartialResults(e.value);
         let newMessage = e.value[0];
         //Base message send to server
-        console.log('message send to server: ', newMessage);
+        // console.log('message send to server: ', newMessage);
 
         setVoiceMessage(newMessage);
         try {
@@ -155,31 +175,37 @@ const Room = () => {
 
     const sendMessage = async (textMessage) => {
         // Model: message, roomId, uId
-        setLoading(true)
-        try {
-            const { data } = await ChatApi.translateMessage(textMessage, 'en');
-            const { status, text_need_trans, translation_text } = data;
-            const uid = auth.currentUser?.uid;
-            await ChatApi.createMessage(uid, textMessage, translation_text, roomId);
+        setLoading(true);
 
-            setLoading(false);
-        } catch (error) {
-            setLoading(false);
+        const { data, error } = await ChatApi.translateMessage(textMessage, 'en');
+        const translation_text = data?.translation_text;
+        const uid = auth.currentUser?.uid;
+        if (data) {
+            await ChatApi.createMessage(uid, textMessage, translation_text, roomId);
         }
+        if (error) {
+            setError(error?.message);
+            setTimeout(() => {
+                setError(null);
+            }, 2000);
+        }
+        setLoading(false);
     }
 
     const getMessageByRoomId = async () => {
-        try {
-            const { result, error } = await ChatApi.getMessageByRoomId(roomId);
-            setMessageList(result);
-        } catch (error) {
-
+        const { result, error } = await ChatApi.getMessageByRoomId(roomId);
+        if (result) { setMessageList(result); }
+        if (error) {
+            setError(error?.message);
+            setTimeout(() => {
+                setError(null);
+            }, 2000);
         }
     }
 
     const checkPermission = () => {
         // if (auth.currentUser.uid === route.params.uid) {
-            navigation.navigate(ROOMSETTINGS)
+        navigation.navigate(ROOMSETTINGS, { uid: route.params?.uid })
         // }
     }
 
@@ -202,23 +228,28 @@ const Room = () => {
                     style={styles.header} />
                 <FlatList
                     data={messageList}
+                    ref={ref}
+                    showsVerticalScrollIndicator={false}
                     key={(item, index) => { item.message }}
-                    style={styles.messageList}
+                    initialScrollIndex={messageList.length - 1}
+                    getItemLayout={(data, index) => {
+                        return { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index };
+                    }}
+                    style={{ ...styles.messageList, marginBottom: isKeyboardVisible == true ? Platform.OS == "ios" ? fontScale(440) : fontScale(400) : fontScale(80) }}
                     renderItem={({ item, index }) => {
-                        return <ChatListItem right={item.uid === auth.currentUser.uid ? true : false} key={item.id} label={item.name}
-                            message={userLanguage=="vi" ?  item.message : item.messageEn} />
+                        return <ChatListItem right={item.uid === auth.currentUser.uid ? true : false} key={item.id} uid={item.uid} label={item.name}
+                            message={userLanguage == "vi" ? item.message : item.messageEn} />
                     }}
                 />
-                
                 <View style={{ ...styles.bottomContain, bottom: keyboardHeight == 0 ? fontScale(20) : keyboardHeight + fontScale(20) }}>
                     {
                         userInfor?.voiceMode === true
                             ?
-                           <View style={{flex:1,justifyContent:"flex-end",position:"absolute",left:width-fontScale(50),bottom:fontScale(50)}}>
-                             <TouchableOpacity onLongPress={() => startRecognizing()}>
-                                <ImageView source={images.microphone} size={40} color={colors.blue} />
-                            </TouchableOpacity>
-                           </View>
+                            <View style={styles.voiceIconContain}>
+                                <TouchableOpacity onLongPress={() => startRecognizing()}>
+                                    <ImageView source={images.microphone} size={40} color={colors.blue} />
+                                </TouchableOpacity>
+                            </View>
                             :
                             <Operation
                                 value={textMessage.toString()}
@@ -230,6 +261,7 @@ const Room = () => {
                     }
                 </View>
             </ImageBackground>
+            {error ? <Toast message={error} /> : null}
         </Container>
     )
 }

@@ -8,9 +8,9 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false }}>
         {
-          Route.map((item)=>(<Stack.Screen name={item.name} key={item.id} component={item.comp}/>))
+          Route.map((item) => (<Stack.Screen name={item.name} key={item.id} component={item.comp} />))
         }
       </Stack.Navigator>
     </NavigationContainer>

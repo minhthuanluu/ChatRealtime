@@ -24,10 +24,11 @@ export default class UserApi {
             };
         }
     }
-    static signout = async(navigate)=>{
+    static signout = async(navigation)=>{
         await signOut(auth);
         if(auth===null){
-            navigate(SPLASH);
+            navigation.reset();
+            navigation.navigate(SPLASH);
         }
     }
     static getUserByUid = async () => {

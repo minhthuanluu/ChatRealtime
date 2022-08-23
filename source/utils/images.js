@@ -10,4 +10,5 @@ export const images = {
     us:require("../images/us.png"),
     vi:require("../images/vi.png"),
     langbg:require("../images/langbg.jpg"),
+    rightarrow:require("../images/rightarrow.png")
 };

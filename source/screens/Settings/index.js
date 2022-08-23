@@ -13,7 +13,7 @@ import { styles } from './style';
 
 const Settings = () => {
     const [user, setUser] = useState(null);
-    const { navigate } = useNavigation();
+    const navigation = useNavigation();
     const [isSwitchOn, setIsSwitchOn] = useState(false);
     const [userLanguage, setUserLanguage] = useState('')
     const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
@@ -30,7 +30,7 @@ const Settings = () => {
             });
         };
         initial();
-    }, [navigate])
+    }, [navigation])
     return (
         <Container style={styles.container}>
             <ImageBackground source={images.sky} resizeMode="cover" style={styles.container}>
@@ -48,7 +48,7 @@ const Settings = () => {
                     </View>
                 </View>
                 <View style={styles.signoutContainer}>
-                    <Button label={Text.signout} style={styles.signoutButton} onPress={() => UserApi.signout(navigate)} />
+                    <Button label={Text.signout} style={styles.signoutButton} onPress={() => UserApi.signout(navigation)} />
                 </View>
             </ImageBackground>
         </Container>
